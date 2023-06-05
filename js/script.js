@@ -1,6 +1,8 @@
-let firstNum = "";
-let secondNum = "";
-let operator = null;
+let firstNum = '';
+let secondNum = '';
+let prevAnswer = '';
+let answer = '';
+let operator = '';
 let numSwitcher = false;
 
 let numbers = document.querySelectorAll('#numbers');
@@ -13,56 +15,78 @@ operators.forEach(operator => {
     operator.addEventListener('click', e => handleInput(e.target.parentNode.id, e.target.id));
 });
 
+let controls = document.querySelectorAll('#controls');
+controls.forEach(control => {
+    control.addEventListener('click', e => handleInput(e.target.parentNode.id, e.target.id));
+});
+
 function handleInput(type, item) {
-    if (type === 'numbers') {
-        if (numSwitcher) {
-            secondNum += item;
-        } else {
-            firstNum += item;
-        }
-    } else if (type === 'operators' && firstNum) {
-        operator = item;
-        numSwitcher = true;
+    switch(type) {
+        case "numbers":
+            if (numSwitcher) {
+                secondNum += item;
+            } else {
+                firstNum += item;
+            }
+            break;
+        case "operators":
+            if (answer) {
+                firstNum = answer;
+                answer = '';
+            } else {
+                operator = item;
+                numSwitcher = true;
+            }
+            break;
+        case "controls":
+            if (item === 'clear') {
+                firstNum = '';
+                secondNum = '';
+                operator = '';
+                answer = '';
+                numSwitcher = false;
+            } else if (item === 'enter' && firstNum && secondNum) {
+                answer = operate(firstNum, secondNum, operator);
+                firstNum = '';
+                secondNum = '';
+                operator = '';
+                numSwitcher = false;
+            }
+            break;
     }
     updateDisplay();
 }
 
 function updateDisplay() {
-    let display = document.querySelectorAll('#display > *');
-    display[0].textContent = firstNum;
-    display[1].textContent = operator;
-    display[2].textContent = secondNum;
+    let display = document.querySelector('#display');
+    display.textContent = `${firstNum} ${operator} ${secondNum} ${answer}`;
 }
 
 function operate(firstNum, secondNum, operation) {
     switch(operation) {
         case "+":
-            add(firstNum, secondNum);
-            break;
+            return add(firstNum, secondNum);
         case "-":
-            subtract(firstNum, secondNum);
-            break;
+            return subtract(firstNum, secondNum);
         case "*":
-            multiply(firstNum, secondNum);
-            break;
+            return multiply(firstNum, secondNum);
         case "/":
-            divide(firstNum, secondNum);
-            break;
+            return divide(firstNum, secondNum);
     }
 }
 
 function add(a, b) {
-    return a + b;
+    return +a + +b;
 }
 
 function subtract(a, b) {
-    return a - b;
+    return +a - +b;
 }
 
 function multiply(a, b) {
-    return a * b;
+    return +a * +b;
 }
 
 function divide(a, b) {
-    return a / b;
+    return +a / +b;
 }
