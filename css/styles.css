@@ -1,0 +1,21 @@
+body {
+    background-color: #FC814A;
+    height: 100vh;
+    margin: 0px;
+}
+
+.container {
+    display: flex;
+}
+
+.centered {
+    justify-content: center;
+    align-items: center;
+}
+
+#display {
+    width: 100px;
+    aspect-ratio: 2/1;
+    text-align: center;
+    background-color: antiquewhite;
+}
