@@ -8,6 +8,7 @@ let answer = '';
 let numSwitcher = false;
 
 /* EVENT LISTENERS FOR DIFFERENT BUTTONS */
+
 let numbers = document.querySelectorAll('#numbers');
 numbers.forEach(number => {
     number.addEventListener('click', e => handleInput(e.target.parentNode.id, e.target.id));
@@ -29,9 +30,9 @@ function handleInput(type, item) {
     switch(type) {
         case "numbers":
             /* Determine which of the two values the user is inputting */
-            if (numSwitcher) {
+            if (numSwitcher && operator) {
                 secondNum += item;
-            } else {
+            } else if (!answer) {
                 firstNum += item;
             }
             primaryLine = `${firstNum} ${operator} ${secondNum}`;
@@ -46,11 +47,6 @@ function handleInput(type, item) {
                 secondNum = '';
                 primaryLine = `${firstNum} ${operator}`;
                 numSwitcher = true;
-            } else if (firstNum && answer) {
-                secondaryLine += `${firstNum}`;
-                operator = item;
-                numSwitcher = true;
-                primaryLine = `${firstNum} ${operator} ${secondNum}`;
             } else {
                 operator = item;
                 numSwitcher = true;
@@ -74,7 +70,7 @@ function handleInput(type, item) {
                 firstNum = answer;
                 secondNum = '';
                 operator = '';
-                numSwitcher = false;
+                numSwitcher = true;
             }
             break;
     }
