@@ -16,6 +16,16 @@ body {
 #display {
     width: 100px;
     aspect-ratio: 2/1;
-    text-align: center;
     background-color: antiquewhite;
+    overflow: hidden;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#display > span {
+    padding: 0 2px;
+}
+
+#numbers > div {
+    cursor: pointer;
 }
