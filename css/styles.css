@@ -15,13 +15,19 @@ body {
 
 #display {
     width: 100px;
-    aspect-ratio: 2/1;
     background-color: antiquewhite;
     overflow: hidden;
-    justify-content: flex-end;
-    align-items: center;
+    text-align: end;
+}
+#secondary {
+    height: 30px;
+    background-color:aqua
 }
 
+#primary {
+    height: 40px;
+    background-color:lightcoral;
+}
 #display > span {
     padding: 0 2px;
 }

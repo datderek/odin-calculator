@@ -1,10 +1,13 @@
+/* VARIABLES FOR CALCULATOR */
 let firstNum = '';
 let secondNum = '';
-let prevAnswer = '';
-let answer = '';
 let operator = '';
+let secondaryLine = '';
+let primaryLine = '';
+let answer = '';
 let numSwitcher = false;
 
+/* EVENT LISTENERS FOR DIFFERENT BUTTONS */
 let numbers = document.querySelectorAll('#numbers');
 numbers.forEach(number => {
     number.addEventListener('click', e => handleInput(e.target.parentNode.id, e.target.id));
@@ -20,34 +23,55 @@ controls.forEach(control => {
     control.addEventListener('click', e => handleInput(e.target.parentNode.id, e.target.id));
 });
 
+/* CALCULATOR LOGIC */
+
 function handleInput(type, item) {
     switch(type) {
         case "numbers":
+            /* Determine which of the two values the user is inputting */
             if (numSwitcher) {
                 secondNum += item;
             } else {
                 firstNum += item;
             }
+            primaryLine = `${firstNum} ${operator} ${secondNum}`;
             break;
         case "operators":
-            if (answer) {
+            /* Determines whether this is the first or second operation */
+            if (firstNum && secondNum) {
+                answer = operate(firstNum, secondNum, operator);
+                secondaryLine = `${firstNum} ${operator} ${secondNum} = ${answer}`;
+                operator = item;
                 firstNum = answer;
-                answer = '';
+                secondNum = '';
+                primaryLine = `${firstNum} ${operator}`;
+                numSwitcher = true;
+            } else if (firstNum && answer) {
+                secondaryLine += `${firstNum}`;
+                operator = item;
+                numSwitcher = true;
+                primaryLine = `${firstNum} ${operator} ${secondNum}`;
             } else {
                 operator = item;
                 numSwitcher = true;
+                primaryLine = `${firstNum} ${operator} ${secondNum}`;
             }
             break;
         case "controls":
+            /* Reacts to enter and clear commands */
             if (item === 'clear') {
                 firstNum = '';
                 secondNum = '';
                 operator = '';
                 answer = '';
+                secondaryLine = '';
+                primaryLine = '';
                 numSwitcher = false;
             } else if (item === 'enter' && firstNum && secondNum) {
                 answer = operate(firstNum, secondNum, operator);
-                firstNum = '';
+                secondaryLine = `${firstNum} ${operator} ${secondNum} = `;
+                primaryLine = `${answer}`;
+                firstNum = answer;
                 secondNum = '';
                 operator = '';
                 numSwitcher = false;
@@ -58,8 +82,9 @@ function handleInput(type, item) {
 }
 
 function updateDisplay() {
-    let display = document.querySelector('#display');
-    display.textContent = `${firstNum} ${operator} ${secondNum} ${answer}`;
+    let display = document.querySelectorAll('#display > *');
+    display[0].innerText = secondaryLine;
+    display[1].innerText = primaryLine;
 }
 
 function operate(firstNum, secondNum, operation) {
